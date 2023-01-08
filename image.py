@@ -80,3 +80,7 @@ def detect_line(img, ypos):
     else:
         mean = line_list.mean()
     return mean
+
+def draw(img):
+    cv2.rectangle(img, (120, 200), (520, 350), (12, 200, 56), thickness=2)
+    cv2.rectangle(img, (180, 380), (460, 475), (50, 100, 255), thickness=2)

@@ -17,6 +17,8 @@ while True:
     ret, frame = cap.read()
     gray = image.gray(frame)
     hsv = image.hsv(frame)
+
+    image.draw(frame)
     cv2.imshow("display", frame)
     key = cv2.waitKey(30)
     if key == 113:
