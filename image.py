@@ -27,7 +27,7 @@ def gray(img):
     ret, result = cv2.threshold(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 128, 255, cv2.THRESH_OTSU)
     return result
 
-def detect_line(image, ypos, result=False):
+def detect_line_grayscale(image, ypos, result=False):
     data = image[ypos]
     blacklist = pd.Series([x for x,y in enumerate(data) if y==0])
     while image[ypos][int(blacklist.mean())] != 0 and len(blacklist) > 10:
@@ -72,17 +72,11 @@ H S V
 B G R
 """
 
-def detect_by_hsv(img, ypos, result=False):
+def detect_line(img, ypos):
     data = [x[1] for x in img[ypos]]
     line_list = pd.Series([x for x,y in enumerate(data) if y > 100])
-    mean = 0
-    if type(result) != bool:
-        try:
-            mean = int(line_list.mean())
-            std = 2*int(line_list.std())
-            cv2.circle(result, (mean, ypos), 8, (0,0,255), thickness=-1)
-            cv2.circle(result, (mean-std, ypos), 8, (0,255,0), thickness=-1)
-            cv2.circle(result, (mean+std, ypos), 8, (0,255,0), thickness=-1)
-        except:
-            pass
+    if len(line_list) == 0:
+        mean = 0
+    else:
+        mean = line_list.mean()
     return mean
