@@ -72,15 +72,17 @@ H S V
 B G R
 """
 
-def detect_line(img, ypos):
+def detect_line(img, ypos): # the image needs to be hsv
     data = [x[1] for x in img[ypos]]
     line_list = pd.Series([x for x,y in enumerate(data) if y > 100])
     if len(line_list) == 0:
         mean = 0
     else:
         mean = line_list.mean()
-    return mean
+    return (mean, ypos)
 
-def draw(img):
+def draw(img, top, bottom):
     cv2.rectangle(img, (120, 200), (520, 350), (12, 200, 56), thickness=2)
     cv2.rectangle(img, (180, 380), (460, 475), (50, 100, 255), thickness=2)
+    cv2.circle(img, top, 5, (255,242,0), thickness=-1)
+    cv2.circle(img, bottom, 5, (255,242,0), thickness=-1)

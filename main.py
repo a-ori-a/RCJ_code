@@ -15,10 +15,13 @@ if not cap.isOpened():
 
 while True:
     ret, frame = cap.read()
-    gray = image.gray(frame)
     hsv = image.hsv(frame)
-
-    image.draw(frame)
+    top = image.detect_line(hsv, 380)
+    bottom = image.detect_line(hsv, 475)
+    top = [int(x) for x in top]
+    bottom = [int(x) for x in bottom]
+    frame = cv2.addWeighted(frame, 0.6, hsv, 0.4, 0)
+    image.draw(frame, top, bottom)
     cv2.imshow("display", frame)
     key = cv2.waitKey(30)
     if key == 113:
