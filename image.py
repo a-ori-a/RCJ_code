@@ -18,18 +18,19 @@ H S V
 B G R
 """
 
-def get_camera():
+def get_camera(): # literally, detects camera
     global cap
     for i in range(2,9):
         cap = cv2.VideoCapture(i)
         if cap.isOpened() : break
 
-def hsv(img):
+def hsv(img): # convert image from bgr to hsv
     result = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     return result
 
 
 def detect_line(img, ypos): # the image needs to be hsv
+    # returns the center of the detected line of ypos in a (x, y) format
     data = [x[1] for x in img[ypos]]
     line_list = pd.Series([x for x,y in enumerate(data) if y > 100])
     if len(line_list) == 0:
@@ -39,10 +40,17 @@ def detect_line(img, ypos): # the image needs to be hsv
     return (mean, ypos)
 
 def draw(img, top, bottom):
+    # No need to run in CLI mode
+    # just for debugging (+eye candy?)
     cv2.rectangle(img, (120, 200), (520, 350), (12, 200, 56), thickness=2)
     cv2.rectangle(img, (180, 380), (460, 475), (50, 100, 255), thickness=2)
     cv2.circle(img, top, 5, (255,242,0), thickness=-1)
     cv2.circle(img, bottom, 5, (255,242,0), thickness=-1)
+
+# ------
+# Don't use the functions below
+# They are outdated
+# ------
 
 def gray(img):
     ret, result = cv2.threshold(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 128, 255, cv2.THRESH_OTSU)
