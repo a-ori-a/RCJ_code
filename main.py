@@ -2,6 +2,7 @@ import image
 import cv2
 from time import sleep
 from concurrent.futures import ProcessPoolExecutor
+import calculation
 
 # resolution 640x480
 # 1  ~~~  640
@@ -21,6 +22,9 @@ while True:
     bottom = image.detect_line(hsv, 475)
     top = [int(x) for x in top]
     bottom = [int(x) for x in bottom]
+
+    cv2.putText(frame, "turn_strength : "+str(calculation.turn_strength(top[0], bottom[0])), (10,30), cv2.FONT_HERSHEY_PLAIN, 2, (12,255,0), thickness=2)
+
     frame = cv2.addWeighted(frame, 0.6, hsv, 0.4, 0)
     image.draw(frame, top, bottom)
     cv2.imshow("display", frame)
