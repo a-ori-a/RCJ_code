@@ -20,14 +20,20 @@ while True:
     ret, frame = cap.read()
     hsv = image.hsv(frame)
     top = image.detect_line(hsv, 380)
-    bottom = image.detect_line(hsv, 475)
+    bottom = image.detect_line(hsv, 460)
     top = [int(x) for x in top]
     bottom = [int(x) for x in bottom]
 
+    points = []
+    for i in [200, 275, 350]:
+        points.append(image.detect_line(hsv, i))
+
     cv2.putText(frame, "turn_strength : "+str(calculation.turn_strength(top[0], bottom[0])), (10,30), cv2.FONT_HERSHEY_PLAIN, 2, (12,255,0), thickness=2)
+    cv2.putText(frame, intersection.intersection(points), (10, 80), cv2.FONT_HERSHEY_PLAIN, 2, (12, 255, 0), thickness=2)
 
     frame = cv2.addWeighted(frame, 0.6, hsv, 0.4, 0)
-    image.draw(frame, top, bottom)
+    image.draw(frame, [top, bottom], points)
+    cv2.imshow("hsv", hsv)
     cv2.imshow("display", frame)
     key = cv2.waitKey(30)
     if key == 113:

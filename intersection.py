@@ -16,11 +16,16 @@ def around(standard, num, thresh=10):
 def intersection(points: list):
     result = ""
     for point in points:
-        condition = around(320, point, 100)
+        condition = around(320, point[0], 80)
         if condition == 0:
             result  += "c"
         elif condition == -1:
             result += "l"
         elif condition == 1:
             result += "r"
-    
+    if result == "clc":
+        return "left"
+    elif result == "crc":
+        return "right"
+    else:
+        return "straight"

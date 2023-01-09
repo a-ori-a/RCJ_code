@@ -1,7 +1,7 @@
 import cv2
 import image
 
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 
 count = 26
 while True:
