@@ -3,6 +3,7 @@ import image
 import numpy as np
 import pandas as pd
 from time import sleep
+import intersection
 
 #カメラの設定　デバイスIDは0
 cap = cv2.VideoCapture(0)
@@ -11,6 +12,13 @@ cap = cv2.VideoCapture(0)
 # 1  ~~~  640
 # ...
 # 480
+
+while True:
+    ret, frame = cap.read()
+    hsv = image.hsv(frame)
+    frame = intersection.horizontal(frame)
+    cv2.imshow("Test",frame)
+    cv2.waitKey(100)
 
 def detect_line_2nd(data, ypos):
     blacklist = [x for x,y in enumerate(data) if y==0]

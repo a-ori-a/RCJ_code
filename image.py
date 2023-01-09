@@ -11,23 +11,60 @@ import pandas as pd
         )
     ]
 ]
+
+覚えておきましょう
+H S V
+↓ ↓ ↓ 
+B G R
 """
 
-def get_camera():
+def get_camera(): # literally, detects camera
     global cap
     for i in range(2,9):
         cap = cv2.VideoCapture(i)
         if cap.isOpened() : break
 
-def hsv(img):
+def hsv(img): # convert image from bgr to hsv
     result = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     return result
+
+
+def detect_line(img, ypos): # the image needs to be hsv
+    # returns the center of the detected line of ypos in a (x, y) format
+    data = [x[1] for x in img[ypos]]
+    line_list = pd.Series([x for x,y in enumerate(data) if y > 30])
+    if len(line_list) == 0:
+        mean = 0
+    else:
+        mean = line_list.mean()
+    mean = int(mean)
+    return (mean, ypos)
+
+def draw(img, follows:list, intersections:list):
+    # No need to run in CLI mode
+    # just for debugging (+eye candy?)
+    #     120 ~ 520
+    # 200
+    #  ↓
+    # 350
+    cv2.rectangle(img, (120, 200), (520, 350), (12, 200, 56), thickness=2)
+    cv2.rectangle(img, (180, 380), (460, 475), (50, 100, 255), thickness=2)
+    for i in follows:
+        cv2.circle(img, i, 5, (255, 242, 0), thickness=-1)
+    
+    for i in intersections:
+        cv2.circle(img, i, 5, (255, 242, 0), thickness=-1)
+
+# ------
+# Don't use the functions below
+# They are outdated
+# ------
 
 def gray(img):
     ret, result = cv2.threshold(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 128, 255, cv2.THRESH_OTSU)
     return result
 
-def detect_line(image, ypos, result=False):
+def detect_line_grayscale(image, ypos, result):
     data = image[ypos]
     blacklist = pd.Series([x for x,y in enumerate(data) if y==0])
     while image[ypos][int(blacklist.mean())] != 0 and len(blacklist) > 10:
@@ -65,24 +102,3 @@ def simple(img, ypos, result=False):
     cv2.circle(img, (right_side, ypos), 10, (255,255,255), thickness=-1)
     return int((left_side+right_side)/2)
 
-"""
-覚えておきましょう
-H S V
-↓ ↓ ↓ 
-B G R
-"""
-
-def detect_by_hsv(img, ypos, result=False):
-    data = [x[1] for x in img[ypos]]
-    line_list = pd.Series([x for x,y in enumerate(data) if y > 100])
-    mean = 0
-    if type(result) != bool:
-        try:
-            mean = int(line_list.mean())
-            std = 2*int(line_list.std())
-            cv2.circle(result, (mean, ypos), 8, (0,0,255), thickness=-1)
-            cv2.circle(result, (mean-std, ypos), 8, (0,255,0), thickness=-1)
-            cv2.circle(result, (mean+std, ypos), 8, (0,255,0), thickness=-1)
-        except:
-            pass
-    return mean

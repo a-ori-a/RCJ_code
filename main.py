@@ -1,6 +1,14 @@
-import image
 import cv2
 from time import sleep
+from concurrent.futures import ProcessPoolExecutor
+import image
+import intersection
+import calculation
+
+# resolution 640x480
+# 1  ~~~  640
+# ...
+# 480
 
 cap = cv2.VideoCapture(0)
 
@@ -10,20 +18,22 @@ if not cap.isOpened():
 
 while True:
     ret, frame = cap.read()
-    gray = image.gray(frame)
     hsv = image.hsv(frame)
-    centers = []
-    new = []
-    for i in range(350,471,30):
-        centers.append(image.detect_line(gray, i))
-    
-    for i in range(350,471,30):
-        new.append(image.detect_by_hsv(hsv, i,frame))
-    
-    for i,j in enumerate(range(350, 441, 30)):
-        cv2.line(frame,(centers[i],j), (centers[i+1],j+30), (255,255,255),thickness=3)
-    for i,j in enumerate(range(350, 441, 30)):
-        cv2.line(frame,(new[i],j), (new[i+1],j+30), (123,223,121),thickness=3)
+    top = image.detect_line(hsv, 380)
+    bottom = image.detect_line(hsv, 460)
+    top = [int(x) for x in top]
+    bottom = [int(x) for x in bottom]
+
+    points = []
+    for i in [200, 275, 350]:
+        points.append(image.detect_line(hsv, i))
+
+    cv2.putText(frame, "turn_strength : "+str(calculation.turn_strength(top[0], bottom[0])), (10,30), cv2.FONT_HERSHEY_PLAIN, 2, (12,255,0), thickness=2)
+    cv2.putText(frame, intersection.intersection(points), (10, 80), cv2.FONT_HERSHEY_PLAIN, 2, (12, 255, 0), thickness=2)
+
+    frame = cv2.addWeighted(frame, 0.6, hsv, 0.4, 0)
+    image.draw(frame, [top, bottom], points)
+    cv2.imshow("hsv", hsv)
     cv2.imshow("display", frame)
     key = cv2.waitKey(30)
     if key == 113:
