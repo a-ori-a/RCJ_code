@@ -18,5 +18,9 @@ while True:
 
     state = intersection.intersection(points)
     print(state)
+    lcd.setCursor(0,0)
+    lcd.printout(state)
+    lcd.setCursor(1,0)
+    lcd.printout(str(top[0]) + ", " + str(bottom[0]))
     
     print(top[0], bottom[0])
