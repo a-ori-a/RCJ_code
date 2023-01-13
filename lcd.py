@@ -19,8 +19,8 @@ while True:
     state = intersection.intersection(points)
     # print(state)
     lcd.setCursor(0,0)
-    lcd.printout(state)
+    lcd.printout(state.rjust(16))
     lcd.setCursor(0, 1)
-    lcd.printout(str(top[0]) + ", " + str(bottom[0]))
+    lcd.printout(str(top[0]) + ", " + str(bottom[0]).rjust(16))
     
     # print(top[0], bottom[0])
