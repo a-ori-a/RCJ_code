@@ -17,10 +17,10 @@ while True:
         points.append(image.detect_line(hsv, i))
 
     state = intersection.intersection(points)
-    print(state)
+    # print(state)
     lcd.setCursor(0,0)
     lcd.printout(state)
     lcd.setCursor(0, 1)
     lcd.printout(str(top[0]) + ", " + str(bottom[0]))
     
-    print(top[0], bottom[0])
+    # print(top[0], bottom[0])
