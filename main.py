@@ -21,8 +21,6 @@ while True:
     hsv = image.hsv(frame)
     top = image.detect_line(hsv, 380)
     bottom = image.detect_line(hsv, 460)
-    top = [int(x) for x in top]
-    bottom = [int(x) for x in bottom]
 
     points = []
     for i in [200, 275, 350]:
