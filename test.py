@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from time import sleep
 import intersection
+import green
 
 #カメラの設定　デバイスIDは0
 cap = cv2.VideoCapture(0)
@@ -16,9 +17,16 @@ cap = cv2.VideoCapture(0)
 while True:
     ret, frame = cap.read()
     hsv = image.hsv(frame)
-    frame = intersection.horizontal(frame)
-    cv2.imshow("Test",frame)
-    cv2.waitKey(100)
+    for x in green.has_green(hsv):
+        cv2.circle(hsv, (x, 230), 2, (255,255,255), thickness=-1)
+    cv2.imshow("hsv image", hsv)
+    key = cv2.waitKey(30)
+    if key == 113:
+        break
+    elif key == 115: # press S
+        cv2.imwrite("./photo.jpg", hsv)
+
+exit()
 
 def detect_line_2nd(data, ypos):
     blacklist = [x for x,y in enumerate(data) if y==0]
