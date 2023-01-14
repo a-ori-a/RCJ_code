@@ -38,4 +38,4 @@ while True:
         break
     elif key == 115: # press S
         cv2.imwrite("./photo.jpg", frame)
-#test ~futon ga futtonda~
+#test ~futon ga futtobanakatta~
