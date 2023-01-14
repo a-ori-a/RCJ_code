@@ -2,10 +2,10 @@ import cv2
 import image
 import calculation
 import intersection
-import RGB1602
+from lcd import lcd
 
 cap = cv2.VideoCapture(0)
-lcd = RGB1602.RGB1602(16,2)
+display = lcd()
 
 while True:
     ret, frame = cap.read()
@@ -18,9 +18,11 @@ while True:
 
     state = intersection.intersection(points)
     # print(state)
-    lcd.setCursor(0,0)
-    lcd.printout(state.center(16))
-    lcd.setCursor(0, 1)
-    lcd.printout((str(top[0]) + ", " + str(bottom[0])).center(16))
+    # lcd.setCursor(0,0)
+    # lcd.printout(state.center(16))
+    # lcd.setCursor(0, 1)
+    # lcd.printout((str(top[0]) + ", " + str(bottom[0])).center(16))
     
     # print(top[0], bottom[0])
+    display.show(state, 0)
+    display.line_indicator(bottom[0])
