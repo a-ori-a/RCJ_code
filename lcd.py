@@ -1,26 +1,23 @@
-import cv2
-import image
-import calculation
-import intersection
 import RGB1602
 
-cap = cv2.VideoCapture(0)
-lcd = RGB1602.RGB1602(16,2)
+class lcd:
+    def __init__(self):
+        self.display = RGB1602.RGB1602(16, 2)
 
-while True:
-    ret, frame = cap.read()
-    hsv = image.hsv(frame)
-    top = image.detect_line(hsv, 380)
-    bottom = image.detect_line(hsv, 460)
-    points = []
-    for i in [200, 275, 350]:
-        points.append(image.detect_line(hsv, i))
+    def cursor(self, row):
+        if row == 0:
+            self.display.setCursor(0, 0)
+        elif row == 1:
+            self.display.setCursor(0, 1)
 
-    state = intersection.intersection(points)
-    # print(state)
-    lcd.setCursor(0,0)
-    lcd.printout(state.center(16))
-    lcd.setCursor(0, 1)
-    lcd.printout((str(top[0]) + ", " + str(bottom[0])).center(16))
+    def show(self, string:str, row=None):
+        if row is None:
+            self.display.printout(string.center(16))
+        else:
+            self.cursor(row)
+            self.display.printout(string.center(16))
     
-    # print(top[0], bottom[0])
+    def line_indicator(self, center, row=1):
+        percentage = int(center/640*16)
+        string = ("_"*(percentage-1)+"ooo").ljust(16, "_")
+        self.show(string, row=row)
