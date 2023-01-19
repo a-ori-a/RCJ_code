@@ -12,7 +12,7 @@ import motors
 # 480
 
 cap = cv2.VideoCapture(0)
-tank = Motors("C", "D")
+tank = motors.Motors("C", "D")
 
 if not cap.isOpened():
 	print("No camera found")
