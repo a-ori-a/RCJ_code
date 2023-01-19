@@ -22,6 +22,9 @@ while True:
 	hsv = image.hsv(frame)
 	# calculate power
 	power = max(50, min(image.turn_strength(hsv, 380, 460), -100))
+	# with ProcessPoolExecutor() as exe:
+	# 	exe.submit(lambda img: max(50, min(image.turn_strength(img, 380, 460), -100)), hsv)
+
 	# intersection detection
 	points = [image.detect_line(hsv, x) for x in [200, 275, 350]]
 	cross = intersection.intersection(points)
