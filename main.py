@@ -3,7 +3,6 @@ from time import sleep
 from concurrent.futures import ProcessPoolExecutor
 import image
 import intersection
-import calculation
 import motors
 
 # resolution 640x480
@@ -12,7 +11,7 @@ import motors
 # 480
 
 cap = cv2.VideoCapture(0)
-tank = motors.Motors("C", "D")
+tank = motors.Motor("C", "D")
 
 if not cap.isOpened():
 	print("No camera found")

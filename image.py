@@ -19,9 +19,8 @@ B G R
 """
 
 def hsv(img): # convert image from bgr to hsv
-	img = cv2.resize(img, (200, 480))
-    result = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    return result
+    img = cv2.resize(img, (200, 480))
+    return cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 
 def detect_line(img, ypos): # the image needs to be hsv
@@ -36,11 +35,9 @@ def detect_line(img, ypos): # the image needs to be hsv
     return (mean, ypos)
 
 def turn_strength(img, top:int, btm:int, debug=False): # set y-position of top and btm
-	# don't foret to set img
-	positions = [detect_line(img, x) for x in (top, btm)]
-	power = max(min(100,positions[0]-positions[0]), -100)
-	if debug : print(power);
-	return power
+    positions = [detect_line(img, y)[0] for y in (top, btm)]
+    power = max(min(100, positions[1]-positions[0]), -100)
+    return power
 
 
 def draw(img, follows:list, intersections:list):
