@@ -31,4 +31,6 @@ class Green:
             else:
                 self.fail_counter += 1
                 self.ypos -= 30
+        else:
+            return "no"
         # 緑が見つからなかった時の処理は別に書かなくても大丈夫なはず...よね？

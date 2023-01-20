@@ -36,12 +36,19 @@ while True:
 	# intersection detection
 	# points = [image.detect_line(hsv, x) for x in [200, 275, 350]]
 	# cross = intersection.intersection(points)
+	green_state = green.catch_green(hsv)
 	if (line_state := intersection.intersection(hsv)) == 'straight':
 		tank.on(50+power, 50-power)
 	elif line_state == 'right':
-		pass # turn right by 90 degree
+		if green_state == "no":
+			pass # go straight
+		elif green_state == "right":
+			pass # turn right by 90 degree
 	elif line_state == 'left':
-		pass # turn left by 90 degree
+		if green_state == "no":
+			pass # go straight
+		elif green_state == "left":
+			pass # turn left by 90 degree
 	elif line_state == 'white':
 		pass # gap or out of line
 	else:
