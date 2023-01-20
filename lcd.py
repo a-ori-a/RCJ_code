@@ -18,6 +18,6 @@ class lcd:
             self.display.printout(string.center(16))
     
     def line_indicator(self, center, row=1):
-        percentage = int(center/640*16)
+        percentage = int(center/100*16)
         string = ("_"*(percentage-1)+"ooo").ljust(16, "_")
         self.show(string, row=row)
