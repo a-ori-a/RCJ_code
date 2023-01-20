@@ -46,11 +46,15 @@ def intersection(img, left, right):
     # edges[0] --> right,  edges[1] --> left
     # 条件がかなり緩いから本番環境でしきい値とらないといけない
     # たぶん値が小さい時　= 上の方にある時は無視するみたいな感じのコードでやっていくと良いんじゃないでしょうか
-    if edges[0] == -1 and edges[1] == -1:
+    # --> 結局しきい値を設定してやっそれ以下なら緑として認めないような仕組みを採用
+    threash = 280
+    right_green = edges[0] > threash
+    left_geen = edges[1] > threash
+    if not (right_green or left_green):
         return "white" # go straight
-    elif edges[0] != 1 and edges[1] != -1:
+    elif left_green and right_green:
         return "cross"
-    elif edges[0] != -1 and edges[1] == -1:
+    elif not left_green and right_green:
         return "right"
-    elif edges[0] == -1 and edges[1] != -1:
+    elif left_green and right_green:
         return "left"
