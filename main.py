@@ -4,6 +4,7 @@ from concurrent.futures import ProcessPoolExecutor
 import image
 import intersection
 import motors
+# from lcd import lcd
 
 # resolution 640x480
 # 1  ~~~  640
@@ -12,6 +13,7 @@ import motors
 
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
+# display = lcd()
 
 if not cap.isOpened():
 	print("No camera found")
@@ -52,3 +54,6 @@ while True:
     #    break
     #elif key == 115: # press S
     #    cv2.imwrite("./photo.jpg", frame)
+
+	# display.show(cross, 0)
+	# display.line_indicator(points[2][0])
