@@ -1,3 +1,6 @@
+import cv2
+import image
+
 # how to detect intersection
 # fot each (top, center, bottom), judge (left, center, right) and then integrate the answer
 # switch by the combined chars
@@ -29,3 +32,25 @@ def intersection(points: list):
         return "right"
     else:
         return "straight"
+
+def intersection(img, left, right):
+    img = cv2.rotate(img, cv2.ROTATE_90_CONTERCLOCKWISE)
+    img = img[200:480, 0:100]
+    # 画像を左向きに90°回転させてimage.pyで作ったdetect_lineを適応できるようにした
+    # 関数を乱用してる感じはするけどこっちのほうが効率としては上なはず
+    # the result will be
+    # 0 --- 480
+    # ||---
+    # 100
+    edges = [image.detect_line(img, i) for i in (10, 90)]
+    # edges[0] --> right,  edges[1] --> left
+    # 条件がかなり緩いから本番環境でしきい値とらないといけない
+    # たぶん値が小さい時　= 上の方にある時は無視するみたいな感じのコードでやっていくと良いんじゃないでしょうか
+    if edges[0] == -1 and edges[1] == -1:
+        return "white" # go straight
+    elif edges[0] != 1 and edges[1] != -1:
+        return "cross"
+    elif edges[0] != -1 and edges[1] == -1:
+        return "right"
+    elif edges[0] == -1 and edges[1] != -1:
+        return "left"
