@@ -33,13 +33,13 @@ def intersection(points: list):
     else:
         return "straight"
 
-def intersection(img, left, right):
+def intersection(img):
     img = cv2.rotate(img, cv2.ROTATE_90_CONTERCLOCKWISE)
     img = img[200:480, 0:100]
     # 画像を左向きに90°回転させてimage.pyで作ったdetect_lineを適応できるようにした
     # 関数を乱用してる感じはするけどこっちのほうが効率としては上なはず
     # the result will be
-    # 0 --- 480
+    # 0 --- 280
     # ||---
     # 100
     edges = [image.detect_line(img, i) for i in (10, 90)]

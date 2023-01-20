@@ -16,6 +16,7 @@ class Green:
             return
         green_found = has_green(img)
         if green_found: # 緑発見
+            self.fail_counter = 0
             if self.ypos > 280: # intersection.py で使われているthreshの値かそれより少し小さいぐらいが望ましい
                 if line_state not in ["straight", "white"]: # 交差点が検出されていたら
                     if line_state == "right":
@@ -28,5 +29,6 @@ class Green:
                 else:
                     self.ypos -= 30
             else:
+                self.fail_counter += 1
                 self.ypos -= 30
         # 緑が見つからなかった時の処理は別に書かなくても大丈夫なはず...よね？
