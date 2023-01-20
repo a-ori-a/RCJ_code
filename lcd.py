@@ -1,6 +1,6 @@
 import RGB1602
 
-class lcd:
+class LCD:
     def __init__(self):
         self.display = RGB1602.RGB1602(16, 2)
 

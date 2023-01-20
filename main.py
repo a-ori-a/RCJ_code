@@ -4,7 +4,7 @@ from concurrent.futures import ProcessPoolExecutor
 import image
 import intersection
 import motors
-from lcd import lcd
+from lcd import LCD
 
 # resolution 640x480
 # 1  ~~~  640
