@@ -44,3 +44,5 @@ while True:
 		pass # gap or out of line
 	else:
 		print("could not see anything ...") # error
+	display.show(cross, 0)
+ 	display.line_indicator(points[2][0])
