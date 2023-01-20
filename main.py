@@ -18,7 +18,7 @@ from lcd import LCD
 
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
-display = lcd()
+display = LCD()
 green = Green()
 
 if not cap.isOpened():
@@ -58,4 +58,4 @@ while True:
 	# 線の場所を表示するのはデバッグ用なら良いけど
 	# 本番環境でやると二重に線の検出をすることになるし
 	# わざわざpowerの返り値を追加するのもめんどくさいのでやめた方がいいと思います
- 	display.line_indicator(image.detect_line(hsv, 460)[0])
+	display.line_indicator(image.detect_line(hsv, 460)[0])

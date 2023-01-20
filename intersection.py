@@ -16,7 +16,7 @@ def around(standard, num, thresh=10):
         print("Something wrong happened in intersection detection")
         return 0
 
-def intersection(points: list):
+def intersection_old(points: list):
     result = ""
     for point in points:
         condition = around(320, point[0], 80)
@@ -42,14 +42,14 @@ def intersection(img):
     # 0 --- 280
     # ||---
     # 100
-    edges = [image.detect_line(img, i) for i in (10, 90)]
+    edges = [image.detect_line(img, i)[0] for i in (10, 90)]
     # edges[0] --> right,  edges[1] --> left
     # 条件がかなり緩いから本番環境でしきい値とらないといけない
     # たぶん値が小さい時　= 上の方にある時は無視するみたいな感じのコードでやっていくと良いんじゃないでしょうか
     # --> 結局しきい値を設定してやっそれ以下なら緑として認めないような仕組みを採用
     threash = 280
     right_green = edges[0] > threash
-    left_geen = edges[1] > threash
+    left_green = edges[1] > threash
     if not (right_green or left_green):
         return "white" # go straight
     elif left_green and right_green:
@@ -58,3 +58,5 @@ def intersection(img):
         return "right"
     elif left_green and right_green:
         return "left"
+    else:
+        return "error in intersection detection"
