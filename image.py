@@ -18,15 +18,9 @@ H S V
 B G R
 """
 
-def get_camera(): # literally, detects camera
-    global cap
-    for i in range(2,9):
-        cap = cv2.VideoCapture(i)
-        if cap.isOpened() : break
-
 def hsv(img): # convert image from bgr to hsv
-    result = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    return result
+    img = cv2.resize(img, (200, 480))
+    return cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 
 def detect_line(img, ypos): # the image needs to be hsv
@@ -39,6 +33,12 @@ def detect_line(img, ypos): # the image needs to be hsv
         mean = line_list.mean()
     mean = int(mean)
     return (mean, ypos)
+
+def turn_strength(img, top:int, btm:int, debug=False): # set y-position of top and btm
+    positions = [detect_line(img, y)[0] for y in (top, btm)]
+    power = max(min(100, positions[1]-positions[0]), -100)
+    return power
+
 
 def draw(img, follows:list, intersections:list):
     # No need to run in CLI mode
@@ -101,4 +101,3 @@ def simple(img, ypos, result=False):
     cv2.circle(img, (left_side, ypos), 10, (255,255,255), thickness=-1)
     cv2.circle(img, (right_side, ypos), 10, (255,255,255), thickness=-1)
     return int((left_side+right_side)/2)
-

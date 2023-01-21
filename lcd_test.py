@@ -2,10 +2,10 @@ import cv2
 import image
 import calculation
 import intersection
-from lcd import lcd
+from lcd import LCD
 
 cap = cv2.VideoCapture(0)
-display = lcd()
+display = LCD()
 
 while True:
     ret, frame = cap.read()
