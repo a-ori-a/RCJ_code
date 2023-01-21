@@ -1,41 +1,61 @@
 import cv2
 from time import sleep
 from concurrent.futures import ProcessPoolExecutor
+from green import Green
 import image
 import intersection
-import calculation
+import motors
+from lcd import LCD
 
 # resolution 640x480
 # 1  ~~~  640
 # ...
 # 480
+# to
+# 1  ~~~  100
+# ...
+# 480
 
 cap = cv2.VideoCapture(0)
+tank = motors.Motor("C", "D")
+display = LCD()
+green = Green()
 
 if not cap.isOpened():
-    print("No camera found")
-    exit()
+	print("No camera found")
+	exit()
 
 while True:
-    ret, frame = cap.read()
-    hsv = image.hsv(frame)
-    top = image.detect_line(hsv, 380)
-    bottom = image.detect_line(hsv, 460)
+	ret, frame = cap.read()
+	hsv = image.hsv(frame)
+	# calculate power
+	power = max(50, min(image.turn_strength(hsv, 380, 460), -100))
+	# with ProcessPoolExecutor() as exe:
+	# 	exe.submit(lambda img: max(50, min(image.turn_strength(img, 380, 460), -100)), hsv)
 
-    points = []
-    for i in [200, 275, 350]:
-        points.append(image.detect_line(hsv, i))
-
-    cv2.putText(frame, "turn_strength : "+str(calculation.turn_strength(top[0], bottom[0])), (10,30), cv2.FONT_HERSHEY_PLAIN, 2, (12,255,0), thickness=2)
-    cv2.putText(frame, intersection.intersection(points), (10, 80), cv2.FONT_HERSHEY_PLAIN, 2, (12, 255, 0), thickness=2)
-
-    frame = cv2.addWeighted(frame, 0.6, hsv, 0.4, 0)
-    image.draw(frame, [top, bottom], points)
-    cv2.imshow("hsv", hsv)
-    cv2.imshow("display", frame)
-    key = cv2.waitKey(30)
-    if key == 113:
-        break
-    elif key == 115: # press S
-        cv2.imwrite("./photo.jpg", frame)
-#test ~futon ga futtobanakatta~
+	# intersection detection
+	# points = [image.detect_line(hsv, x) for x in [200, 275, 350]]
+	# cross = intersection.intersection(points)
+	green_state = green.catch_green(hsv)
+	if (line_state := intersection.intersection(hsv)) == 'straight':
+		tank.on(50+power, 50-power)
+	elif line_state == 'right':
+		if green_state == "no":
+			pass # go straight
+		elif green_state == "right":
+			pass # turn right by 90 degree
+	elif line_state == 'left':
+		if green_state == "no":
+			pass # go straight
+		elif green_state == "left":
+			pass # turn left by 90 degree
+	elif line_state == 'white':
+		pass # gap or out of line
+	else:
+		print("could not see anything ...") # error
+	display.show(line_state, 0)
+	
+	# 線の場所を表示するのはデバッグ用なら良いけど
+	# 本番環境でやると二重に線の検出をすることになるし
+	# わざわざpowerの返り値を追加するのもめんどくさいのでやめた方がいいと思います
+	display.line_indicator(image.detect_line(hsv, 460)[0])
