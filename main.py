@@ -20,7 +20,7 @@ cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
 # display = LCD()
 green = Green()
-default_speed = 10
+default_speed = 20
 
 if not cap.isOpened():
 	print("No camera found")
