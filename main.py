@@ -18,7 +18,7 @@ from lcd import LCD
 
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
-display = LCD()
+# display = LCD()
 green = Green()
 default_speed = 10
 
