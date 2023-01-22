@@ -20,10 +20,17 @@ cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
 display = LCD()
 green = Green()
+default_speed = 10
 
 if not cap.isOpened():
 	print("No camera found")
 	exit()
+
+while True:
+    ret, frame = cap.read()
+    hsv = image.hsv(frame)
+    power = image.turn_strength(hsv, 380, 460)/10
+    tank.on(default_speed+power, default_speed-power)
 
 while True:
 	ret, frame = cap.read()
@@ -58,4 +65,4 @@ while True:
 	# 線の場所を表示するのはデバッグ用なら良いけど
 	# 本番環境でやると二重に線の検出をすることになるし
 	# わざわざpowerの返り値を追加するのもめんどくさいのでやめた方がいいと思います
-	display.line_indicator(image.detect_line(hsv, 460)[0])
+	# display.line_indicator(image.detect_line(hsv, 460)[0])
