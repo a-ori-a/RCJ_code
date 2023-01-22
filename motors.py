@@ -12,7 +12,7 @@ class Motor:
     def off(self):
         self.tank.stop()
 
-if __name__ == main:
+if __name__ == "main":
     tank = Motor("C", "D")
     tank.on(100, 100)
     sleep(10)
