@@ -7,7 +7,7 @@ class Motor:
         self.tank = bh.MotorPair(left, right)
 
     def on(self, left, right):
-        self.tank.start(left, -right)
+        self.tank.start(-left, right)
     
     def off(self):
         self.tank.stop()
