@@ -26,13 +26,16 @@ if not cap.isOpened():
 	print("No camera found")
 	exit()
 
+def limit(num, min=-100, max=100):
+    return min(max(num, -100), 100)
+
 while True:
     ret, frame = cap.read()
     hsv = image.hsv(frame)
     power = image.turn_strength(hsv, 380, 460)
     # i don't know
     # print(power)
-    tank.on(default_speed+power, default_speed-power)
+    tank.on(limit(default_speed+power), limit(default_speed-power))
 
 while True:
 	ret, frame = cap.read()
