@@ -66,4 +66,5 @@ while True:
 	# 線の場所を表示するのはデバッグ用なら良いけど
 	# 本番環境でやると二重に線の検出をすることになるし
 	# わざわざpowerの返り値を追加するのもめんどくさいのでやめた方がいいと思います
+	# 確かに
 	# display.line_indicator(image.detect_line(hsv, 460)[0])
