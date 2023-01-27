@@ -26,10 +26,10 @@ def hsv(img): # convert image from bgr to hsv
 
 def detect_line(img, ypos): # the image needs to be hsv
     # returns the center of the detected line of ypos in a (x, y) format
-    data = [x[1] for x in img[ypos]]
-    line_list = pd.Series([x for x,y in enumerate(data) if y > 30])
+    data = [x[2] for x in img[ypos]]
+    line_list = pd.Series([x for x,y in enumerate(data) if y < 40])
     if len(line_list) == 0:
-        mean = 0
+        mean = -1
     else:
         mean = line_list.mean()
     mean = int(mean)
@@ -41,7 +41,7 @@ def turn_strength(img, top:int, btm:int, debug=False): # set y-position of top a
     if position == -1:
         print('no line found')
         return 0
-    power = 100 - position
+    power = position - 100
     return power
 
 def draw(img, follows:list, intersections:list):
@@ -105,3 +105,11 @@ def simple(img, ypos, result=False):
     cv2.circle(img, (left_side, ypos), 10, (255,255,255), thickness=-1)
     cv2.circle(img, (right_side, ypos), 10, (255,255,255), thickness=-1)
     return int((left_side+right_side)/2)
+
+
+if __name__ == '__main__':
+    cap = cv2.VideoCapture(0)
+    while True:
+        ret, frame = cap.read()
+        frame = hsv(frame)
+        print(turn_strength(frame, 0,400))
