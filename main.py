@@ -66,6 +66,9 @@ while True:
 			pass # turn left by 90 degree
 	elif line_state == 'white':
 		pass # gap or out of line
+	elif line_state == 'cross':
+		if green_state == 'back':
+			pass
 	else:
 		print("could not see anything ...") # error
 	display.show(line_state, 0)
