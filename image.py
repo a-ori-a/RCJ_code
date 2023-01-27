@@ -19,7 +19,8 @@ B G R
 """
 
 def hsv(img): # convert image from bgr to hsv
-    img = cv2.resize(img, (200, 480))
+    img = cv2.blur(img, (5,5)) # 画像にぼかしをかける
+    img = cv2.resize(img, (200, 480)) # ぼかした画像をさらに縮小してい感じにする
     return cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 
