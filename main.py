@@ -29,7 +29,7 @@ default_speed = 10
 
 if not cap.isOpened():
 	print("No camera found")
-	lcd.show('no camra')
+	display.show('no camra')
 	exit()
 
 while True:
