@@ -37,7 +37,7 @@ while True:
 	hsv = image.hsv(frame)
 	power = image.turn_strength(frame)
 	print(power)
-	tank.on(default_speed + power, default_speed - power)
+	tank.on(default_speed - power, default_speed + power)
 	sleep(0.05)
 	# tank.on(default_speed+power, default_speed-power)
 
