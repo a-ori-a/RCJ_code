@@ -18,7 +18,7 @@ from buildhat import DistanceSensor, Motor
 
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
-catch = Motor('A')
+# catch = Motor('A')
 ds = DistanceSensor('B')
 try:
 	display = LCD()
@@ -35,10 +35,14 @@ if not cap.isOpened():
 while True:
     ret, frame = cap.read()
     hsv = image.hsv(frame)
-    if image.detect_line(hsv, 0,460)[0] < 100:
-        tank.on(10,30)    # power = image.turn_strength(hsv, 380, 460)
+    see = 460
+    if 90 < image.detect_line(hsv,see)[0] < 110:
+        tank.on(10,10)
+    elif image.detect_line(hsv, see)[0] < 91:
+        tank.on(0,40)    # power = image.turn_strength(hsv, 380, 460)
     else:
-        tank.n(30,10)
+        tank.on(40,0)
+    sleep(0.03)
     # tank.on(default_speed+power, default_speed-power)
 
 while True:
