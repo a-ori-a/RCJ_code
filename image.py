@@ -1,5 +1,6 @@
 import cv2
 import pandas as pd
+import subprocess
 
 # imageの配列のイメージ  ←?
 """
@@ -24,6 +25,18 @@ def hsv(img): # convert image from bgr to hsv
     return cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 
+def detect_line_2a(img):
+    cv2.imwrite('./photo.jpg', img)
+    btm = subprocess.run(['jp2a', './photo.jpg'],capture_output=True, text=True).stdout.split('\n')[-2]
+    btm_length = len(btm)
+    print(btm)
+    blacks = []
+    for i,pixel in enumerate(btm):
+        if pixel == ' ':
+            blacks.append(i)
+    return sum(blacks)/(len(blacks)+1)/btm_length
+
+
 def detect_line(img, ypos): # the image needs to be hsv
     # returns the center of the detected line of ypos in a (x, y) format
     data = [x[2] for x in img[ypos]]
@@ -35,14 +48,11 @@ def detect_line(img, ypos): # the image needs to be hsv
     mean = int(mean)
     return (mean, ypos)
 
-def turn_strength(img, top:int, btm:int, debug=False): # set y-position of top and btm
-    position = detect_line(img, btm)[0]
-    print(position)
-    if position == -1:
-        print('no line found')
-        return 0
-    power = position - 100
-    return power
+def turn_strength(img): # set y-position of top and btm
+    position = int(detect_line_2a(img) * 100)
+    if position == 0: return 0
+    return position - 50
+    
 
 def draw(img, follows:list, intersections:list):
     # No need to run in CLI mode
@@ -111,5 +121,5 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
     while True:
         ret, frame = cap.read()
-        frame = hsv(frame)
-        print(turn_strength(frame, 0,400))
+        # frame = hsv(frame)
+        print(turn_strength(frame))
