@@ -32,12 +32,16 @@ if not cap.isOpened():
 	display.show('no camra')
 	exit()
 
+last = 0
+d = 0
 while True:
 	ret, frame = cap.read()
 	hsv = image.hsv(frame)
 	power = image.turn_strength(frame)
+	power += (power - last) * 2
 	print(power)
 	tank.on(default_speed - power, default_speed + power)
+	last = power
 	sleep(0.05)
 	# tank.on(default_speed+power, default_speed-power)
 
