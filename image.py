@@ -48,7 +48,7 @@ def detect_line(img, ypos): # the image needs to be hsv
     return (mean, ypos)
 
 def turn_strength(img): # set y-position of top and btm
-    position = int(detect_line_2a(img) * 100)
+    position = int(detect_line(img) * 100)
     if position == 0: return 0
     return position - 50
     
@@ -120,5 +120,5 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
     while True:
         ret, frame = cap.read()
-        # frame = hsv(frame)
-        print(turn_strength(frame))
+        frame = hsv(frame)
+        print(detect_line(frame,460))
