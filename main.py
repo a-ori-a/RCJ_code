@@ -25,24 +25,24 @@ try:
 except:
 	print('no lcd found')
 green = Green()
-default_speed = 10
+default_speed = 20
 
 if not cap.isOpened():
 	print("No camera found")
 	display.show('no camra')
 	exit()
 
-last = 0
 d = 0
 while True:
 	ret, frame = cap.read()
 	hsv = image.hsv(frame)
+	# position = image.turn_strength(frame)
+	# power = position*1.5 + (d-position)*0.5
 	power = image.turn_strength(frame)
-	power += (power - last) * 1
+	power = max(min(power,50),-50)
+	# d = position
 	print(power)
 	tank.on(default_speed - power, default_speed + power)
-	last = power
-	sleep(0.05)
 	# tank.on(default_speed+power, default_speed-power)
 
 while True:
