@@ -38,7 +38,7 @@ while True:
 	ret, frame = cap.read()
 	hsv = image.hsv(frame)
 	power = image.turn_strength(frame)
-	power += (power - last) * 2
+	power += (power - last) * 1
 	print(power)
 	tank.on(default_speed - power, default_speed + power)
 	last = power
