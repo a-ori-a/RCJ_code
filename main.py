@@ -35,8 +35,8 @@ if not cap.isOpened():
 while True:
     ret, frame = cap.read()
     hsv = image.hsv(frame)
-    print(image.detect_line(hsv, 460))
     power = image.turn_strength(hsv, 380, 460)
+	print(power)
     # tank.on(default_speed+power, default_speed-power)
 
 while True:
