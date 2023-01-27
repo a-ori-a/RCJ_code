@@ -29,7 +29,6 @@ def detect_line_2a(img):
     cv2.imwrite('./photo.jpg', img)
     btm = subprocess.run(['jp2a', './photo.jpg'],capture_output=True, text=True).stdout.split('\n')[-2]
     btm_length = len(btm)
-    print(btm)
     blacks = []
     for i,pixel in enumerate(btm):
         if pixel == ' ':
