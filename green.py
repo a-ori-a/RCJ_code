@@ -9,7 +9,7 @@ class Green:
         if len(data) < 5: data = []  #データに含まれている緑の点の個数が5個より少なかったらデータを初期化する
         return data
     
-    def catch_green(self, img):
+    def catch_green(self, img, line_x):
         if self.fail_counter >= 5:
             self.fail_counter = 0
             self.ypos = 200
@@ -19,12 +19,35 @@ class Green:
             self.fail_counter = 0
             if self.ypos > 280: # intersection.py で使われているthreshの値かそれより少し小さいぐらいが望ましい
                 if line_state not in ["straight", "white"]: # 交差点が検出されていたら
-                    if line_state == "right":
-                        pass
-                    elif line_state == "left":
-                        pass
-                    elif line_state == "cross":
-                        pass
+                    left_green = 0
+                    right_green = 0
+                    for i in green_found:
+                        if i < line_x:
+                            left_green += 1
+                        elif i > line_x:
+                            right_green += 1
+                    if left_green >= 5:
+                        left_green = True
+                    else:
+                        left_green = False
+                    if right_green >= 5:
+                        right_green = True
+                    else:
+                        right_green = False
+                    if line_state == "right" and left_green:
+                        print("ERROR:green must not exist on left now.")
+                        return "no"
+                    elif line_state == "left" and right_green:
+                        print("ERROR:green must not exist on right now.")
+                        return "no"
+                    else:
+                        if right_green:
+                            if left_green:
+                                return "back"
+                            else:
+                                return "right"
+                        elif left_green:
+                            return "left"
                     self.ypos = 200 # reset the pointer
                 else:
                     self.ypos -= 30
