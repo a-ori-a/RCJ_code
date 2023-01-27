@@ -40,7 +40,7 @@ def turn_strength(img, top:int, btm:int, debug=False): # set y-position of top a
     if positions[1] == -1:
         print('no line found')
         return 0
-    power = positions[1] - 100
+    power = 100 - positions[1]
     return power
 
 def draw(img, follows:list, intersections:list):
