@@ -18,7 +18,7 @@ from buildhat import DistanceSensor, Motor
 
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
-catch = Motor('A')
+# catch = Motor('A')
 ds = DistanceSensor('B')
 try:
 	display = LCD()
