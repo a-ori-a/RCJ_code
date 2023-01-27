@@ -36,11 +36,11 @@ def detect_line(img, ypos): # the image needs to be hsv
     return (mean, ypos)
 
 def turn_strength(img, top:int, btm:int, debug=False): # set y-position of top and btm
-    positions = [detect_line(img, y)[0] for y in (top, btm)]
-    if positions[1] == -1:
+    position = detect_line(img, btm)[0]
+    if position == -1:
         print('no line found')
         return 0
-    power = 100 - positions[1]
+    power = 100 - position
     return power
 
 def draw(img, follows:list, intersections:list):
