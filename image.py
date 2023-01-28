@@ -2,7 +2,8 @@ import cv2
 import pandas as pd
 import subprocess
 import lcd
-display = lcd.LCD()
+if __name__ == '__main__':
+	display = lcd.LCD()
 
 # imageの配列のイメージ  ←?
 """
