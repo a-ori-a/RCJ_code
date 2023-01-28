@@ -52,6 +52,8 @@ class Green:
                 elif i > line_x:
                     right_green += 1
                     right_green_x += i
+            left_green_x = left_green_x / left_green
+            right_green_x = right_green_x / right_green
             if left_green >= 5:
                 left_green = True
             else:
@@ -61,9 +63,9 @@ class Green:
             else:
                 right_green = False
             if left_green:
-                left_green = self.check_green(img, line_x, left_green_x)
+                left_green = self.check_green(img, left_green_x, line_y)
             if right_green:
-                right_green = self.check_green(img, line_x, left_green_x)
+                right_green = self.check_green(img, left_green_x, line_y)
             if right_green:
                 if left_green:
                     return "back"
