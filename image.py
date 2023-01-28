@@ -54,7 +54,6 @@ def detect_line(img, ypos=300): # the image needs to be hsv
 	else:
 		mean = line_list.mean()
 	mean = int(mean)
-	display.line_indicator(mean)
 	return (mean, ypos)
 
 def turn_strength(img, ypos): # set y-position of top and btm

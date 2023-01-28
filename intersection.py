@@ -44,6 +44,10 @@ def intersection_img(hsv):
     interlists = pd.Series([image.detect_line(hsv, y) for y in range(299, -1, -1)])
     top_btm = (interlists[0]+interlists[-1]) / 2
     mean = interlists.mean()
+    if not around(top_btm,mean, 30):
+        return 't_road'
+    else:
+        return 'straight'
 
 def intersection_bad(img, line_position):
     img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
