@@ -26,6 +26,14 @@ def hsv(img): # convert image from bgr to hsv
 	img = cv2.resize(img, (200, 480)) # ぼかした画像をさらに縮小してい感じにする
 	return cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
+def is_color(img,x,y):
+	pixel = img[x][y]
+	if 60 < pixel[0] < 90 and 150 < pixel[1] and 20 < pixel[2]:
+		return 'green'
+	elif pixel[2] < 40:
+		return 'black'
+	else:
+		return 'white'
 
 def detect_line_2a(img):
 	cv2.imwrite('./photo.jpg', img)
