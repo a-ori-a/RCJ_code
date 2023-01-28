@@ -11,6 +11,34 @@ class Green:
         if len(data) < 5: data = []  #データに含まれている緑の点の個数が5個より少なかったらデータを初期化する
         return data
     
+    """
+    def check_green(self, img, line_x, line_y):
+        green_y = line_y
+        black_count = 0
+        white_count = 0
+        flag = True
+        while True:
+            if green_y < 0:
+                break
+            color = image.is_color(img, line_x, green_y)
+            if color == "white":
+                white_count += 1
+                black_count = 0
+                if white_count >= 5:
+                    break
+            elif color == "black":
+                black_count += 1
+                white_count = 0
+                if black_count >= 5:
+                    flag = False
+                    break
+            else:
+                black_count = 0
+                white_count = 0
+            green_y -= 1
+        return flag
+        """
+    
     def catch_green(self, img, line_x, line_y):
         green_found = self.has_green(img, line_y)
         if green_found: # 緑発見
@@ -34,20 +62,19 @@ class Green:
                 right_green = True
             else:
                 right_green = False
-            if line_state == "right" and left_green:
-                print("ERROR:green must not exist on left now.")
-                return "no"
-            elif line_state == "left" and right_green:
-                print("ERROR:green must not exist on right now.")
-                return "no"
-            else:
-                if right_green:
-                    if left_green:
-                        return "back"
-                    else:
-                        return "right"
-                elif left_green:
-                    return "left"
+            """
+            if left_green:
+                left_green = self.check_green(img, line_x, left_green_x)
+            if right_green:
+                right_green = self.check_green(img, line_x, left_green_x)
+            """
+            if right_green:
+                if left_green:
+                    return "back"
+                else:
+                    return "right"
+            elif left_green:
+                return "left"
         else:
             return "no"
         # 緑が見つからなかった時の処理は別に書かなくても大丈夫なはず...よね？
