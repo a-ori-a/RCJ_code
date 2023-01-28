@@ -11,7 +11,6 @@ class Green:
         if len(data) < 5: data = []  #データに含まれている緑の点の個数が5個より少なかったらデータを初期化する
         return data
     
-    """
     def check_green(self, img, line_x, line_y):
         green_y = line_y
         black_count = 0
@@ -37,7 +36,6 @@ class Green:
                 white_count = 0
             green_y -= 1
         return flag
-        """
     
     def catch_green(self, img, line_x, line_y):
         green_found = self.has_green(img, line_y)
@@ -62,12 +60,10 @@ class Green:
                 right_green = True
             else:
                 right_green = False
-            """
             if left_green:
                 left_green = self.check_green(img, line_x, left_green_x)
             if right_green:
                 right_green = self.check_green(img, line_x, left_green_x)
-            """
             if right_green:
                 if left_green:
                     return "back"
