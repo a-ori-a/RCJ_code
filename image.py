@@ -36,7 +36,7 @@ def detect_line_2a(img):
     return sum(blacks)/(len(blacks)+1)/btm_length
 
 
-def detect_line(img, ypos): # the image needs to be hsv
+def detect_line(img, ypos=300): # the image needs to be hsv
     # returns the center of the detected line of ypos in a (x, y) format
     data = [x[2] for x in img[ypos]]
     line_list = pd.Series([x for x,y in enumerate(data) if y < 40])
@@ -47,10 +47,13 @@ def detect_line(img, ypos): # the image needs to be hsv
     mean = int(mean)
     return (mean, ypos)
 
-def turn_strength(img): # set y-position of top and btm
-    position = int(detect_line(img) * 100)
-    if position == 0: return 0
-    return position - 50
+def turn_strength(img, ypos): # set y-position of top and btm
+	power = detect_line(img, ypos)[0]
+	if power == -1:
+		print('no line found')
+		return 0
+	else:
+		return power -100
     
 
 def draw(img, follows:list, intersections:list):
@@ -121,4 +124,4 @@ if __name__ == '__main__':
     while True:
         ret, frame = cap.read()
         frame = hsv(frame)
-        print(detect_line(frame,460))
+        print(turn_strength(frame,300))

@@ -42,7 +42,7 @@ while True:
 	power = max(min(power,50),-50)
 	# d = position
 	print(power)
-	tank.on(default_speed - power, default_speed + power)
+	tank.on(default_speed - power, default_speed)
 	# tank.on(default_speed+power, default_speed-power)
 
 while True:
