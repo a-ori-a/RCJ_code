@@ -1,3 +1,5 @@
+import image
+
 class Green:
     def __init__(self):
         self.ypos = 200
