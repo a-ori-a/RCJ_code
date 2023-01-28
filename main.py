@@ -61,20 +61,33 @@ while True:
 	hsv = image.hsv(frame)
 	line_x = image.detect_line(hsv,350)[0]
 	# 緑検出(最優先)
-	if (green_state := green.catch_green(hsv, line_x,380)) == 'right':
-		turn = 90
-	elif green_state == 'left':
-		turn = -90
-	elif green_state == 'back':
-		turn = 180 * which_to_turn
-	if green_state != 'no': print(green_state)
+	green_state = green.catch_green(hsv, line_x,380)
 	if green_state != 'no':
 		tank.off()
 		sleep(1)
-		for i in range(10):
-			follow(hsv, 250, scan=True,gain=0.2)
-			sleep(0.08)
-		tank.turn(turn)
+		for i in range(5):
+			follow(hsv, 250,scan=True,gain=0.2)
+			sleep(0.05)
+		tank.off()
+		green_state = green.catch_green(hsv, line_x,380)
+		display.show(green_state)
+		sleep(1)
+		if green_state == 'right':
+			turn = 90
+		elif green_state == 'left':
+			turn = -90
+		elif green_state == 'back':
+			turn = 180 * which_to_turn
+		if green_state != 'no': print(green_state)
+		if green_state != 'no':
+			tank.off()
+			sleep(1)
+			for i in range(15):
+				follow(hsv, 250, scan=True,gain=0.2)
+				sleep(0.08)
+			tank.turn(turn)
+	else:
+		display.show(green_state)
 	
 	if (t_road := intersection.intersection(hsv, intersection_points)) != 't_road':
 		follow(hsv, 460)
@@ -89,4 +102,4 @@ while True:
 		# exit()
 	else:
 		print(t_road)
-	display.show(t_road)
+	# display.show(t_road)
