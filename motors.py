@@ -14,6 +14,12 @@ class Motor:
     
     def off(self):
         self.tank.stop()
+    
+    def turn(self, deg):
+        if deg < 0:
+            self.tank.run_for_degrees(270*deg/90,20,20)
+        else:
+            self.tank.run_for_degrees(270*deg/90, -20,-20)
 
 if __name__ == "__main__":
     tank = Motor("C", "D")
