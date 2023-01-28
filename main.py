@@ -72,12 +72,12 @@ while True:
 			tank.on(default_speed-power, default_speed+power)
 			pass
 		elif line_state == 'right':
-			elif green_state == "right":
+			if green_state == "right":
 				pass # turn right by 90 degree 
 			else:
 				pass # error
 		elif line_state == 'left':
-			elif green_state == "left":
+			if green_state == "left":
 				pass # turn left by 90 degree
 			else:
 				pass # error
