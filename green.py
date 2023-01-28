@@ -14,12 +14,16 @@ class Green:
         if green_found: # 緑発見
             self.fail_counter = 0
             left_green = 0
+            left_green_x = 0
             right_green = 0
+            right_green_x = 0
             for i in green_found:
                 if i < line_x:
                     left_green += 1
+                    left_green_x += i
                 elif i > line_x:
                     right_green += 1
+                    right_green_x += i
             if left_green >= 5:
                 left_green = True
             else:
