@@ -57,9 +57,10 @@ def detect_line(img, ypos=300): # the image needs to be hsv
 	return (mean, ypos)
 
 def turn_strength(img, ypos): # set y-position of top and btm
-	power = detect_line(img, ypos)[0]
+	power = [detect_line(img, y)[0] for y in range(ypos-45,ypos,15)]
+	power = sum(power) / 3
 	if power == -1:
-		print('no line found')
+		# print('no line found')
 		return [0,-1]
 	else:
 		return [power - 100, power]
@@ -86,7 +87,7 @@ def draw(img, follows:list, intersections:list):
 # ------
 
 def gray(img):
-	ret, result = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	result = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	return result
 
 def detect_line_grayscale(image, ypos, result):

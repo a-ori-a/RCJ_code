@@ -12,12 +12,19 @@ def around(standard, num, thresh=10):
     else:
         return False
 
-def intersection(points: list):
-    print(points)
+def intersection(hsv, points: list):
+    for i in [0,2]:
+        points[i] = image.detect_line(hsv, points[i])[0]
+    points[1] = [image.detect_line(hsv, y)[0] for y in range(points[1],points[1]+15,5)]
+    if -1 in points[1]:
+        points[1] = -1
+    else:
+        points[1] = sum(points[1]) / 3
+    # print(points)
     if -1 in points:
         return 'unstable'
     mean = (points[0] + points[2])/2
-    if (not around(points[1], mean, 35)) and (points[1] == max(points) or points[1] == min(points)):
+    if (not around(points[1], mean, 40)) and (points[1] == max(points) or points[1] == min(points)):
         return 't_road'
     else:
         return 'straight'
@@ -39,11 +46,6 @@ def intersection(points: list):
         return "right"
     else:
         return "straight"
-
-def oct(hsv):
-    hsv = image.gray(cv2.resize(hsv,(3,3)))
-    print(hsv)
-    # if [x for x in hsv if x[]]
 
 def intersection_img(hsv):
     interlists = list([image.detect_line(hsv, y)[0] for y in range(400,460,10)])
