@@ -30,6 +30,6 @@ class LCD:
         # センターは検出下線の中心のx座標で、
         # 0~200までの値を取る可能性があるから
         # 200で割ってディスプレイに表示可能な16文字をかけておく
-        percentage = int(center/100*16)
+        percentage = int(center/200*16)
         string = ("_"*(percentage-1)+"ooo").ljust(16, "_")
         self.show(string, row=row)

@@ -25,7 +25,7 @@ try:
 except:
 	print('no lcd found')
 green = Green()
-default_speed = 20
+default_speed = 17
 
 if not cap.isOpened():
 	print("No camera found")
@@ -33,27 +33,31 @@ if not cap.isOpened():
 	exit()
 
 d = 0
+# while True:
+# 	ret, frame = cap.read()
+# 	hsv = image.hsv(frame)
+# 	# position = image.turn_strength(frame)
+# 	# power = position*1.5 + (d-position)*0.5
+# 	power = image.turn_strength(hsv, 460) * 1 # 1.7
+# 	# power = max(min(power,50),-50)
+# 	# d = position
+# 	# tank.on(default_speed - power, default_speed)
+# 	tank.on(default_speed-power, default_speed+power)
+
 while True:
 	ret, frame = cap.read()
 	hsv = image.hsv(frame)
 	# position = image.turn_strength(frame)
 	# power = position*1.5 + (d-position)*0.5
-	power = image.turn_strength(frame)
-	power = max(min(power,50),-50)
+	power, line_position = image.turn_strength(hsv, 460)#  * 1 # 1.7
+	# power = max(min(power,50),-50)
 	# d = position
-	print(power)
-	tank.on(default_speed - power, default_speed)
-	# tank.on(default_speed+power, default_speed-power)
-
-while True:
-	ret, frame = cap.read()
-	hsv = image.hsv(frame)
-	# 線の検出&曲がる強さの計算
-	power = max(50, min(image.turn_strength(hsv, 380, 460), -100))
+	# tank.on(default_speed - power, default_speed)
 	# 緑の状態確認
-	green_state = green.catch_green(hsv)
+	green_state = green.catch_green(hsv, line_position)
 	if (line_state := intersection.intersection(hsv)) == 'straight':
-		tank.on(50+power, 50-power)
+		# tank.on(default_speed-power, default_speed+power)
+		pass
 	elif line_state == 'right':
 		if green_state == "no":
 			pass # go straight
@@ -72,3 +76,4 @@ while True:
 	else:
 		print("could not see anything ...") # error
 	display.show(line_state, 0)
+	print(line_state)

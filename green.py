@@ -14,7 +14,7 @@ class Green:
             self.fail_counter = 0
             self.ypos = 200
             return
-        green_found = has_green(img)
+        green_found = self.has_green(img)
         if green_found: # 緑発見
             self.fail_counter = 0
             if self.ypos > 280: # intersection.py で使われているthreshの値かそれより少し小さいぐらいが望ましい
