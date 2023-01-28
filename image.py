@@ -86,7 +86,7 @@ def draw(img, follows:list, intersections:list):
 # ------
 
 def gray(img):
-	ret, result = cv2.threshold(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 128, 255, cv2.THRESH_OTSU)
+	ret, result = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	return result
 
 def detect_line_grayscale(image, ypos, result):

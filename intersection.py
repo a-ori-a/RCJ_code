@@ -40,11 +40,16 @@ def intersection(points: list):
     else:
         return "straight"
 
+def oct(hsv):
+    hsv = image.gray(cv2.resize(hsv,(3,3)))
+    print(hsv)
+    # if [x for x in hsv if x[]]
+
 def intersection_img(hsv):
-    interlists = pd.Series([image.detect_line(hsv, y) for y in range(299, -1, -1)])
+    interlists = list([image.detect_line(hsv, y)[0] for y in range(400,460,10)])
     top_btm = (interlists[0]+interlists[-1]) / 2
-    mean = interlists.mean()
-    if not around(top_btm,mean, 30):
+    mean = sum(interlists)/len(interlists)
+    if not around(top_btm,mean, 30) and (not around(top_btm, interlists[int(len(interlists)/2)],20)):
         return 't_road'
     else:
         return 'straight'
