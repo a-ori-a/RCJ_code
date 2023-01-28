@@ -67,9 +67,10 @@ while True:
 		turn = -90
 	elif green_state == 'back':
 		turn = 180 * which_to_turn
+	if green_state != 'no': print(green_state)
 	if green_state != 'no':
+		tank.off()
 		sleep(1)
-		print('green')
 		for i in range(10):
 			follow(hsv, 250, scan=True,gain=0.2)
 			sleep(0.08)

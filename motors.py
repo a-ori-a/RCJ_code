@@ -16,16 +16,10 @@ class Motor:
         self.tank.stop()
     
     def turn(self, deg):
-        if deg < 0:
-            self.tank.run_for_degrees(270*deg/90,10,10)
-        else:
-            self.tank.run_for_degrees(270*deg/90, -10,-10)
+        self.tank.run_for_degrees(270*deg/90,-10,-10)
     
     def move(self, deg, speed=15):
-        if deg > 0:
-            self.tank.run_for_degrees(deg,-speed,speed)
-        else:
-            self.tank.run_for_degrees(-deg,speed,-speed)
+        self.tank.run_for_degrees(deg,-speed,speed)
 
 if __name__ == "__main__":
     tank = Motor("C", "D")
