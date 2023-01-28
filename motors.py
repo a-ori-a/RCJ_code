@@ -7,7 +7,7 @@ class Motor:
         self.tank = bh.MotorPair(left, right)
 
     def power_limit(self, power):
-        return max(min(100, power),-100)
+        return max(min(50, power),-50)
 
     def on(self, left, right):
         self.tank.start(self.power_limit(left), self.power_limit(-right))

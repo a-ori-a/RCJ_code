@@ -1,4 +1,5 @@
 import cv2
+import pandas as pd
 import image
 
 # how to detect intersection
@@ -7,19 +8,25 @@ import image
 
 def around(standard, num, thresh=10):
     if abs(num - standard) < thresh:
-        return 0
-    elif num < standard:
-        return -1
-    elif num > standard:
-        return 1
+        return True
     else:
-        print("Something wrong happened in intersection detection")
-        return 0
+        return False
 
-def intersection_old(points: list):
+def intersection(points: list):
+    print(points)
+    if -1 in points:
+        return 'unstable'
+    mean = (points[0] + points[2])/2
+    if (not around(points[1], mean, 35)) and (points[1] == max(points) or points[1] == min(points)):
+        return 't_road'
+    else:
+        return 'straight'
+
+
+
     result = ""
     for point in points:
-        condition = around(320, point[0], 80)
+        condition = around(100, point[0], 20)
         if condition == 0:
             result  += "c"
         elif condition == -1:
@@ -33,7 +40,12 @@ def intersection_old(points: list):
     else:
         return "straight"
 
-def intersection(img, line_position):
+def intersection_img(hsv):
+    interlists = pd.Series([image.detect_line(hsv, y) for y in range(299, -1, -1)])
+    top_btm = (interlists[0]+interlists[-1]) / 2
+    mean = interlists.mean()
+
+def intersection_bad(img, line_position):
     img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # 画像を左向きに90°回転させてimage.pyで作ったdetect_lineを適応できるようにした
     # 関数を乱用してる感じはするけどこっちのほうが効率としては上なはず
@@ -44,7 +56,7 @@ def intersection(img, line_position):
     if line_position < 40 or line_position > 159:
         edges = [0, 0]
     else:
-        edges = [image.detect_line(img, i)[0] for i in (line_position-40, line_position+40)]
+        edges = [image.detect_line(img, i)[0] for i in (line_position-10, line_position+10)]
     # edges[0] --> right,  edges[1] --> left
     # 条件がかなり緩いから本番環境でしきい値とらないといけない
     # たぶん値が小さい時　= 上の方にある時は無視するみたいな感じのコードでやっていくと良いんじゃないでしょうか
@@ -53,11 +65,7 @@ def intersection(img, line_position):
     threash = 440 # in 480
     right = edges[0] > threash
     left = edges[1] > threash
-    if not (right or left):
-        return "straight" # go straight
-    elif left and right:
-        return "cross"
-    elif right:
-        return "right"
-    elif left:
-        return "left"
+    if (right and not left) or (not right and left):
+        return 't_road'
+    else:
+        return 'straight'

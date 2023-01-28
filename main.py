@@ -25,7 +25,7 @@ try:
 except:
 	print('no lcd found')
 green = Green()
-default_speed = 10
+default_speed = 17
 
 if not cap.isOpened():
 	print("No camera found")
@@ -34,6 +34,7 @@ if not cap.isOpened():
 
 #-------------<<This is main>>----------------
 d = 0
+i = 0
 # while True:
 # 	ret, frame = cap.read()
 # 	hsv = image.hsv(frame)
@@ -44,10 +45,44 @@ d = 0
 # 	# d = position
 # 	# tank.on(default_speed - power, default_speed)
 # 	tank.on(default_speed-power, default_speed+power)
+t_road = 'pass'
+# while True:
+# 	ret, frame = cap.read()
+# 	hsv = image.hsv(frame)
+# 	points = [image.detect_line(hsv,i) for i in [360, 410, 460]]
+# 	t_road = intersection.intersection(points)
+# 	print(t_road)
+# 	sleep(0.03)
 
 while True:
 	ret, frame = cap.read()
 	hsv = image.hsv(frame)
+	points = [image.detect_line(hsv,i)[0] for i in [380, 420, 460]]
+	# t_road = intersection.intersection(points)
+	tmp, line_n = image.turn_strength(hsv, 460)
+	if (t_road := intersection.intersection(points)) != 't_road':
+		tmp, line_n = image.turn_strength(hsv, 460)#  * 1 # 1.7
+		d = tmp - d
+		power = tmp * 2.5 + d * 2 + i * 0
+		d = tmp
+		i += tmp
+		print(power)
+		tank.on(default_speed-power, default_speed+power)
+	elif t_road == 't_road':
+		tank.off()
+		print(t_road)
+		exit()
+	else:
+		print(t_road)
+	display.show(t_road)
+
+
+
+
+
+
+	continue
+
 	# position = image.turn_strength(frame)
 	# power = position*1.5 + (d-position)*0.5
 	power, line_n = image.turn_strength(hsv, 450)#  * 1 # 1.7
