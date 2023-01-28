@@ -58,7 +58,7 @@ while True:
 	# d = position
 	# tank.on(default_speed - power, default_speed)
 	# 緑の状態確認
-	green_state = green.catch_green(hsv, line_position, 470)
+	green_state = green.catch_green(hsv, line_n, 470)
 	if green_state == 'no':
 		if line_e == -1:
 			line_y = line_f
@@ -68,7 +68,7 @@ while True:
 			else:
 				line_y = line_f
 	else:
-		if (line_state := intersection.intersection(hsv, line_position)) == 'straight':
+		if (line_state := intersection.intersection(hsv, line_n)) == 'straight':
 			tank.on(default_speed-power, default_speed+power)
 			pass
 		elif line_state == 'right':
