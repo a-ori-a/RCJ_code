@@ -41,7 +41,10 @@ def intersection(img, line_position):
     # 0 --- 280
     # ||---
     # 100
-    edges = [image.detect_line(img, i)[0] for i in (line_position-20, line_position+20)]
+    if line_position < 40 or line_position > 159:
+        edges = [0,0]
+    else:
+        edges = [image.detect_line(img, i)[0] for i in (line_position-40, line_position+40)]
     # edges[0] --> right,  edges[1] --> left
     # 条件がかなり緩いから本番環境でしきい値とらないといけない
     # たぶん値が小さい時　= 上の方にある時は無視するみたいな感じのコードでやっていくと良いんじゃないでしょうか
