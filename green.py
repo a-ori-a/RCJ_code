@@ -52,8 +52,10 @@ class Green:
                 elif i > line_x:
                     right_green += 1
                     right_green_x += i
-            left_green_x = left_green_x / left_green
-            right_green_x = right_green_x / right_green
+            if left_green != 0:
+                left_green_x = left_green_x / left_green
+            if right_green != 0:
+                right_green_x = right_green_x / right_green
             if left_green >= 5:
                 left_green = True
             else:
