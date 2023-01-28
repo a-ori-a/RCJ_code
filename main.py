@@ -25,7 +25,7 @@ try:
 except:
 	print('no lcd found')
 green = Green()
-default_speed = 17
+default_speed = 7
 
 if not cap.isOpened():
 	print("No camera found")
@@ -60,7 +60,8 @@ while True:
 	points = [image.detect_line(hsv,i)[0] for i in [380, 420, 460]]
 	# t_road = intersection.intersection(points)
 	tmp, line_n = image.turn_strength(hsv, 460)
-	if (t_road := intersection.intersection(points)) != 't_road':
+	# if (t_road := intersection.intersection(points)) != 't_road':
+	if (t_road := intersection.intersection_img(hsv)) != 't_road':
 		tmp, line_n = image.turn_strength(hsv, 460)#  * 1 # 1.7
 		d = tmp - d
 		power = tmp * 2.5 + d * 2 + i * 0
