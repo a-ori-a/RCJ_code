@@ -3,6 +3,7 @@ import image
 
 cap = cv2.VideoCapture(0)
 ret, frame = cap.read()
+frame = cv2.resize(frame,(200,480))
 hsv = image.hsv(frame)
 
 x = y = 0
@@ -15,14 +16,18 @@ while True:
     else:
         print('black')
         color = (0,0,0)
-    pic = cv2.circle(frame,(x,y),5,color,-1)
+    pic = frame
+    cv2.circle(pic,(x,y),5,color,-1)
     cv2.imshow('is_color_tester', pic)
     key = cv2.waitKey(30)
+    print(key)
     if key == 81:
-        x = max(0,x-1)
+        x = max(0,x-3)
     elif key == 82:
-        y = max(0,y-1)
+        y = max(0,y-3)
     elif key == 83:
-        y = min(479, y+1)
+        x = min(199,x+3)
     elif key == 84:
-        x = min(199,x+1)
+        y = min(479, y+3)
+    elif key == 113:
+        exit()
