@@ -10,11 +10,11 @@ from buildhat import DistanceSensor, Motor
 # resolution 640x480
 # 1  ~~~  640
 # ...
-# 480
+# 479
 # to
-# 1  ~~~  100
+# 1  ~~~  200
 # ...
-# 480
+# 479
 
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
@@ -31,7 +31,7 @@ if not cap.isOpened():
 	print("No camera found")
 	display.show('no camra')
 	exit()
-
+"""
 d = 0
 while True:
 	ret, frame = cap.read()
@@ -44,15 +44,58 @@ while True:
 	print(power)
 	tank.on(default_speed - power, default_speed + power)
 	# tank.on(default_speed+power, default_speed-power)
+# """
 
 while True:
 	ret, frame = cap.read()
 	hsv = image.hsv(frame)
-	# 線の検出&曲がる強さの計算
-	power = max(50, min(image.turn_strength(hsv, 380, 460), -100))
-	# 緑の状態確認
+	line_n = image.detect_line(hsv, 479)[0]-100
+	line_f = image.detect_line(hsv, 300)[0]-100
+	line_e = image.detect_line(hsb, 0)[0]-100
+	if line_n == -101:
+		if line_f == -101:
+			if line_e == -101:
+				line_state = "none"
+				# maybe rescue zone
+			else:
+				line_state = "pd_p"
+				pd_line = line_e
+				# long gap's middle (?)
+		else:
+			line_state = "pd_s"
+			pd_line = line_f
+			# gap's middle
+	elif line_f == -101:
+		if line_e == -101:
+			line_state = "back"
+			# gap....?
+		else:
+			line_state = "pd_s"
+			pd_line = line_e
+	elif line_n < -5:
+		if line_f < -5:
+			sa = line_f - line_n
+			if sa < -5:
+				line_state = "left"
+				# before cose out
+			elif sa < 5:
+				line_state = "pd_p"
+				pd_line = line_n
+			else:
+				line_state = "straight"
+		elif line_f <5:
+			line_state = "straight"
+		else:
+			line_state = "pd_p"
+			pd_line = line_f
+	elif line_n < 5:
+		if line_f < -5:
+			line_state = "left"
+		elif line_f < 5:
+
+			# ima koko
 	green_state = green.catch_green(hsv)
-	if (line_state := intersection.intersection(hsv)) == 'straight':
+	if line_state == 'straight':
 		tank.on(50+power, 50-power)
 	elif line_state == 'right':
 		if green_state == "no":
