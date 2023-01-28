@@ -64,7 +64,7 @@ while True:
 			line_y = line_f
 		else:
 			if abs(line_n) < abs(line_f):
-				line_y = line_n
+				line_y = line_n - 100
 			else:
 				line_y = line_f
 	else:
