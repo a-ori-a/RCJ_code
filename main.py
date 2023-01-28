@@ -60,19 +60,17 @@ while True:
 	# 緑の状態確認
 	green_state = green.catch_green(hsv, line_n, 470)
 	if green_state == 'no':
+		line_state = '!intersection'
 		if line_e == -1:
-			line_y = line_f
+			line_y = 350 # line_f
 		else:
 			if abs(line_n) < abs(line_f):
-				line_y = line_n
+				line_y = 450 # line_n
 			else:
-				line_y = line_f
-		if line_y == -1:
-			print('no line found')
-			tank.on(default_speed, default_speed)
-		else:
-			line_y -= 100
-			tank.on(default_speed-line_y, default_speed+line_y)
+				line_y = 350 # line_f
+		power, _ = image.turn_strength(hsv, line_y)
+		power *= 0.8
+		tank.on(default_speed-power, default_speed+power)
 	else:
 		if (line_state := intersection.intersection(hsv, line_n)) == 'straight':
 			tank.on(default_speed-power, default_speed+power)
