@@ -32,6 +32,7 @@ if not cap.isOpened():
 	display.show('no camra')
 	exit()
 
+#-------------<<This is main>>----------------
 d = 0
 # while True:
 # 	ret, frame = cap.read()
