@@ -42,7 +42,7 @@ def intersection(img, line_position):
     # ||---
     # 100
     if line_position < 40 or line_position > 159:
-        edges = [0,0]
+        edges = [0, 0]
     else:
         edges = [image.detect_line(img, i)[0] for i in (line_position-40, line_position+40)]
     # edges[0] --> right,  edges[1] --> left
@@ -50,7 +50,7 @@ def intersection(img, line_position):
     # たぶん値が小さい時　= 上の方にある時は無視するみたいな感じのコードでやっていくと良いんじゃないでしょうか
     # --> 結局しきい値を設定してやっそれ以下なら緑として認めないような仕組みを採用
     # 交差点かどうかの検出には遠くの方でまっすぐかどうかも条件に含めないとカーブをT字路判定してしまう
-    threash = 400 # in 480
+    threash = 440 # in 480
     right = edges[0] > threash
     left = edges[1] > threash
     if not (right or left):
