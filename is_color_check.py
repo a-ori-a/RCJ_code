@@ -15,7 +15,14 @@ while True:
     else:
         print('black')
         color = (0,0,0)
-    pic = cv2.circle(hsv,(x,y),5,color,-1)
+    pic = cv2.circle(frame,(x,y),5,color,-1)
     cv2.imshow('is_color_tester', pic)
     key = cv2.waitKey(30)
-    print(key)
+    if key == 81:
+        x = max(0,x-1)
+    elif key == 82:
+        y = max(0,y-1)
+    elif key == 83:
+        y = min(479, y+1)
+    elif key == 84:
+        x = min(199,x+1)
