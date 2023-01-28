@@ -33,7 +33,7 @@ def intersection_old(points: list):
     else:
         return "straight"
 
-def intersection(img):
+def intersection(img, line_position):
     img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
     # 画像を左向きに90°回転させてimage.pyで作ったdetect_lineを適応できるようにした
     # 関数を乱用してる感じはするけどこっちのほうが効率としては上なはず
@@ -41,7 +41,7 @@ def intersection(img):
     # 0 --- 280
     # ||---
     # 100
-    edges = [image.detect_line(img, i)[0] for i in (20, 180)]
+    edges = [image.detect_line(img, i)[0] for i in (line_position-20, line_position+20)]
     # edges[0] --> right,  edges[1] --> left
     # 条件がかなり緩いから本番環境でしきい値とらないといけない
     # たぶん値が小さい時　= 上の方にある時は無視するみたいな感じのコードでやっていくと良いんじゃないでしょうか
