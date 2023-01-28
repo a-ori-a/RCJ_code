@@ -62,15 +62,18 @@ while True:
 	line_x = image.detect_line(hsv,350)[0]
 	# 緑検出(最優先)
 	green_state = green.catch_green(hsv, line_x,380)
-	if green_state != 'no':
-		tank.off()
+	if green_state != 'no': # 緑があったら
+		tank.off() # 休憩
+		display.show(green_state) # 最初の画面更新
 		sleep(1)
-		for i in range(5):
-			follow(hsv, 250,scan=True,gain=0.2)
+		for i in range(3): # ちょっと進む
+			follow(hsv, 460,scan=True,gain=0.2)
 			sleep(0.05)
-		tank.off()
-		green_state = green.catch_green(hsv, line_x,380)
-		display.show(green_state)
+		tank.off() # 休憩
+		_, frame = cap.read() # 写真撮影
+		hsv = image.hsv(frame)
+		green_state = green.catch_green(hsv, line_x,380) # 再検出
+		display.show(green_state) # 再検出の画面更新
 		sleep(1)
 		if green_state == 'right':
 			turn = 90
@@ -78,11 +81,10 @@ while True:
 			turn = -90
 		elif green_state == 'back':
 			turn = 180 * which_to_turn
-		if green_state != 'no': print(green_state)
 		if green_state != 'no':
 			tank.off()
 			sleep(1)
-			for i in range(15):
+			for i in range(10):
 				follow(hsv, 250, scan=True,gain=0.2)
 				sleep(0.08)
 			tank.turn(turn)
