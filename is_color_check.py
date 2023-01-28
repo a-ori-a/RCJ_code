@@ -10,7 +10,7 @@ x = y = 0
 
 while True:
     if (point := image.is_color(hsv, x, y)) == 'green':
-        color = (255,0,0)
+        color = (0,255,0)
     elif point == 'white':
         color = (255,255,255)
     else:
@@ -20,7 +20,7 @@ while True:
     cv2.circle(pic,(x,y),5,color,-1)
     cv2.imshow('is_color_tester', pic)
     key = cv2.waitKey(30)
-    print(key)
+    # print(key)
     if key == 81:
         x = max(0,x-3)
     elif key == 82:

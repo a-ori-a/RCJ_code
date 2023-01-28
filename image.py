@@ -26,6 +26,7 @@ def hsv(img): # convert image from bgr to hsv
 
 def is_color(img,x,y):
 	pixel = img[y][x]
+	print(pixel)
 	if 60 < pixel[0] < 90 and 150 < pixel[1] and 20 < pixel[2]:
 		return 'green'
 	elif pixel[2] < 40:
