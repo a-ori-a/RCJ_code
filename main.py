@@ -52,7 +52,7 @@ while True:
 	# power = position*1.5 + (d-position)*0.5
 	power, line_n = image.turn_strength(hsv, 450)#  * 1 # 1.7
 	power *= 0.8
-	line_f = image.detect_line(hsv, 350)[0]-100
+	line_f = image.detect_line(hsv, 350)[0]
 	line_e = image.detect_line(hsv, 0)[0]
 	# power = max(min(power,50),-50)
 	# d = position
@@ -64,9 +64,15 @@ while True:
 			line_y = line_f
 		else:
 			if abs(line_n) < abs(line_f):
-				line_y = line_n - 100
+				line_y = line_n
 			else:
 				line_y = line_f
+		if line_y == -1:
+			print('no line found')
+			tank.on(default_speed, default_speed)
+		else:
+			line_y -= 100
+			tank.on(default_speed-line_y, default_speed+line_y)
 	else:
 		if (line_state := intersection.intersection(hsv, line_n)) == 'straight':
 			tank.on(default_speed-power, default_speed+power)
