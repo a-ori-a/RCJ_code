@@ -39,6 +39,8 @@ class Green:
     
     def catch_green(self, img, line_x, line_y):
         green_found = self.has_green(img, line_y)
+        if line_x == -1:
+            green_found = []
         if green_found: # 緑発見
             self.fail_counter = 0
             left_green = 0
