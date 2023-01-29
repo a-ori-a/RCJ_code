@@ -18,7 +18,7 @@ class Motor:
     def turn(self, deg):
         try:
             self.tank.run_for_degrees(270*deg/90,-10,-10)
-        except NameError:
+        except:
             self.tank.run_for_degrees(270,-10,-10)
     
     def move(self, deg, speed=20):

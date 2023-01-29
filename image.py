@@ -49,7 +49,7 @@ def detect_line_2a(img):
 def detect_line(img, ypos=300): # the image needs to be hsv
 	# returns the center of the detected line of ypos in a (x, y) format
 	data = [x[2] for x in img[ypos]]
-	line_list = pd.Series([x for x,y in enumerate(data) if y < 35])
+	line_list = pd.Series([x for x,y in enumerate(data) if y < 40])
 	if len(line_list) == 0:
 		mean = -1
 	else:

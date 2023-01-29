@@ -48,9 +48,9 @@ def follow(img,ypos,scan=False,gain=1):
 	if scan:
 		_, frame = cap.read()
 		img = image.hsv(frame)
-	tmp, _ = image.turn_strength(img, ypos)
+	tmp, second = image.turn_strength(img, ypos)
 	d = tmp - d
-	power = ( tmp * 1.8 + d * 2 + i * 0 ) * gain
+	power = ( tmp * 2.5 + d * 2.5 + i * 0 ) * gain
 	d = tmp
 	# i += tmp
 	print(power)
@@ -81,29 +81,6 @@ while True:
 		ret, frame = cap.read()
 		hsv = image.hsv(frame)
 		line_x = image.detect_line(hsv,350)[0]
-		# 障害物検出(最優先)
-		# if counter >= 40:
-		# 	counter = 0
-		# 	tank.off()
-		# 	display.show('get distance')
-			# if 0 < ds.get_distance() < 70:
-			# 	print('obs')
-			# 	display.show('obstacle')
-			# 	tank.turn(110)
-			# 	tank.off()
-			# 	tank.move(300)
-			# 	tank.off()
-			# 	tank.turn(-90)
-			# 	tank.off()
-			# 	tank.move(450)
-			# 	tank.off()
-			# 	tank.turn(-90)
-			# 	tank.off()
-			# 	tank.move(300)
-			# 	tank.off()
-			# 	tank.turn(110)
-			# 	tank.off()
-			# 	display.show('no obstacle')
 		# 緑検出(優先度高)
 		green_state = green.catch_green(hsv, line_x,380)
 		if green_state != 'no': # 緑があったら
@@ -125,14 +102,18 @@ while True:
 			elif green_state == 'left':
 				turn = -90
 			elif green_state == 'back':
-				turn = 180 * which_to_turn
+				turn = 180
+			elif green_state == 'no':
+				turn = 90
 			if green_state != 'no' and green_state != 'back':
 				tank.off()
 				sleep(1)
 				for i in range(19):
 					follow(hsv, 250, scan=True,gain=0.2)
 					sleep(0.08)
-			if green_state != 'no': tank.turn(turn)
+			if green_state != 'no':
+				print(green_state)
+				tank.turn(turn)
 		else:
 			display.show(green_state)
 		
