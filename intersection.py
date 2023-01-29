@@ -24,7 +24,7 @@ def intersection(hsv, points: list):
     if -1 in points:
         return 'unstable'
     mean = (points[0] + points[2])/2
-    if (not around(points[1], mean, 40)) and (points[1] == max(points) or points[1] == min(points)):
+    if (not around(points[1], mean, 45)) and (points[1] == max(points) or points[1] == min(points)):
         return 't_road'
     else:
         return 'straight'

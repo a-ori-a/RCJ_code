@@ -18,6 +18,7 @@ import pigpio
 # 480
 pi = pigpio.pi()
 pi.set_mode(17,pigpio.INPUT)
+pi.set_mode(27,pigpio.INPUT)
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
 # catch = Motor('A')
@@ -29,7 +30,7 @@ try:
 except:
 	print('no lcd found')
 green = Green()
-default_speed = 10
+default_speed = 11
 
 if not cap.isOpened():
 	print("No camera found")
@@ -49,8 +50,11 @@ def follow(img,ypos,scan=False,gain=1):
 		_, frame = cap.read()
 		img = image.hsv(frame)
 	tmp, second = image.turn_strength(img, ypos)
+	if second == -1:
+		follow(img,0, scan=True, gain=0.7)
+		return
 	d = tmp - d
-	power = ( tmp * 2.5 + d * 2.5 + i * 0 ) * gain
+	power = ( tmp * 1 + d * 2 + i * 0 ) * gain
 	d = tmp
 	# i += tmp
 	# print(power)
@@ -77,24 +81,28 @@ while True:
 	while not pi.read(17):
 		# いろいろ初期化
 		counter += 1
-		intersection_points = [300,380,460]
+		intersection_points = [340,400,460]
 		ret, frame = cap.read()
 		hsv = image.hsv(frame)
-		line_x = image.detect_line(hsv,380)[0]
+		line_x = image.detect_line(hsv,350)[0]
 		print(line_x)
+
+		if pi.read(27):
+			tank.turn(-180)
+
 		# 緑検出(優先度高)
-		green_state = green.catch_green(hsv, line_x,380)
+		green_state = green.catch_green(hsv, line_x,350)
 		if green_state != 'no': # 緑があったら
 			tank.off() # 休憩
 			display.show(green_state) # 最初の画面更新
 			sleep(1)
-			for i in range(3): # ちょっと進む
-				follow(hsv, 460,scan=True,gain=0.2)
+			for i in range(10): # ちょっと進む
+				follow(hsv, 460,scan=True,gain=0.4)
 				sleep(0.05)
 			tank.off() # 休憩
 			_, frame = cap.read() # 写真撮影
 			hsv = image.hsv(frame)
-			tmp=green.catch_green(hsv, line_x,380)
+			tmp=green.catch_green(hsv, line_x,350)
 			green_state = tmp if tmp != 'no' else green_state # 再検出
 			display.show(green_state) # 再検出の画面更新
 			sleep(1)
@@ -109,11 +117,13 @@ while True:
 			if green_state != 'no' and green_state != 'back':
 				tank.off()
 				sleep(1)
-				for i in range(19):
+				for i in range(17):
 					follow(hsv, 250, scan=True,gain=0.2)
 					sleep(0.08)
 			if green_state != 'no':
 				tank.turn(turn)
+				tank.off()
+				display.show('turn finished')
 		else:
 			display.show(green_state)
 		
