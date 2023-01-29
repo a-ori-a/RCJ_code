@@ -46,13 +46,13 @@ class Green:
             right_green = 0
             right_green_x = 0
             for i in green_found:
-                if i < line_x:
+                if i < line_x: # 左側の緑
                     left_green += 1
                     left_green_x += i
-                elif i > line_x:
+                elif i > line_x: # 右側の緑
                     right_green += 1
                     right_green_x += i
-            if left_green != 0:
+            if left_green != 0: # 左にあるなら
                 left_green_x = left_green_x / left_green
             if right_green != 0:
                 right_green_x = right_green_x / right_green
