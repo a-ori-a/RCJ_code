@@ -62,4 +62,3 @@ def explore_rescuezone(tank):
             break
         if(find_wall()):
             tank.turn(90)
-                
