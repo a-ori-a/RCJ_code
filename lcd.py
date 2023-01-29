@@ -18,6 +18,7 @@ class LCD:
 
     def show(self, string:str, row=None):
         if not self.open: return
+        if string == None: return
         if row is None:
             self.cursor(0) # 基本的に上側に色々表示するはずだからカーソルを上に持っていくべき
             self.display.printout(string.center(16))
