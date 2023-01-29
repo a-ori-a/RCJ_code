@@ -40,41 +40,63 @@ class Green:
     def catch_green(self, img, line_x, line_y):
         green_found = self.has_green(img, line_y)
         if green_found: # 緑発見
-            self.fail_counter = 0
-            left_green = 0
+            green_flag = True
+            left_green = line_x
             left_green_x = 0
-            right_green = 0
+            left_green_count = 0
+            find_left = True
+            right_green = line_x
             right_green_x = 0
-            for i in green_found:
-                if i < line_x:
-                    left_green += 1
-                    left_green_x += i
-                elif i > line_x:
-                    right_green += 1
-                    right_green_x += i
-            if left_green != 0:
-                left_green_x = left_green_x / left_green
-            if right_green != 0:
-                right_green_x = right_green_x / right_green
-            if left_green >= 5:
-                left_green = True
-            else:
-                left_green = False
-            if right_green >= 5:
-                right_green = True
-            else:
-                right_green = False
-            if left_green:
-                left_green = self.check_green(img, left_green_x, line_y)
-            if right_green:
-                right_green = self.check_green(img, right_green_x, line_y)
-            if right_green:
-                if left_green:
-                    return "back"
+            right_green_count = 0
+            find_right = True
+            while True:
+                if find_left:
+                    color = image.is_color(img, left_green, line_y)
+                    if color == "green":
+                        left_green_count += 1
+                        left_green_x += left_green
+                    elif color == "black":
+                        if left_green_count != 0:
+                            green_flag = False
+                            return self.catch_green(img, left_green, line_y)
+                    else:
+                        find_left = False
+                        if left_green_count >= 3:
+                            left_green_x = left_green_x / left_green_count
+                            left_green = self.check_green(img, left_green_x, line_y)
+                        else:
+                            left_green = False
+                
+                if find_right:
+                    color = image.is_color(img, right_green, line_y)
+                    if color == "green":
+                        right_green_count += 1
+                        right_green_x += right_green
+                    elif color == "black":
+                        if right_green_count != 0:
+                            green_flag = False
+                            return self.catch_green(img, right_green, line_y)
+                    else:
+                        find_right = False
+                        if right_green_count >= 3:
+                            right_green_x = right_green_x / right_green_count
+                            right_green = self.check_green(img, right_green_x, line_y)
+                        else:
+                            right_green = False
+                if not (find_right or find_left):
+                    break
+                if not green_flag:
+                    break
+            if green_flag:
+                if right_green:
+                    if left_green:
+                        return "back"
+                    else:
+                        return "right"
+                elif left_green:
+                    return "left"
                 else:
-                    return "right"
-            elif left_green:
-                return "left"
+                    return "no"
         else:
             return "no"
         # 緑が見つからなかった時の処理は別に書かなくても大丈夫なはず...よね？
