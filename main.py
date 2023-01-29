@@ -21,6 +21,7 @@ pi.set_mode(17,pigpio.INPUT)
 pi.set_mode(27,pigpio.INPUT)
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
+hisaisha = False
 # catch = Motor('A')
 # ds = DistanceSensor('B')
 # ds.on()
@@ -77,6 +78,7 @@ while True:
 	while not pi.read(17):
 		sleep(0.3)
 	display.show('program start')
+	hisaisha = False
 	sleep(0.5)
 	while not pi.read(17):
 		# いろいろ初期化
@@ -89,6 +91,7 @@ while True:
 
 		if pi.read(27):
 			tank.turn(-180)
+			hisaisha = True
 
 		# 緑検出(優先度高)
 		green_state = green.catch_green(hsv, line_x,350)
@@ -128,7 +131,11 @@ while True:
 			display.show(green_state)
 		
 		if (t_road := intersection.intersection(hsv, intersection_points)) != 't_road':
-			follow(hsv, 460)
+			if hisaisha:
+				tank.off()
+				display.show("mission complete")
+			else:
+				follow(hsv, 460)
 		elif t_road == 't_road':
 			d = 0
 			tank.off()
