@@ -53,7 +53,7 @@ def follow(img,ypos,scan=False,gain=1):
 	power = ( tmp * 2.5 + d * 2.5 + i * 0 ) * gain
 	d = tmp
 	# i += tmp
-	print(power)
+	# print(power)
 	tank.on(default_speed-power, default_speed+power)
 
 # 1 → right
@@ -80,7 +80,8 @@ while True:
 		intersection_points = [300,380,460]
 		ret, frame = cap.read()
 		hsv = image.hsv(frame)
-		line_x = image.detect_line(hsv,350)[0]
+		line_x = image.detect_line(hsv,380)[0]
+		print(line_x)
 		# 緑検出(優先度高)
 		green_state = green.catch_green(hsv, line_x,380)
 		if green_state != 'no': # 緑があったら
@@ -112,7 +113,6 @@ while True:
 					follow(hsv, 250, scan=True,gain=0.2)
 					sleep(0.08)
 			if green_state != 'no':
-				print(green_state)
 				tank.turn(turn)
 		else:
 			display.show(green_state)
@@ -122,7 +122,7 @@ while True:
 		elif t_road == 't_road':
 			d = 0
 			tank.off()
-			print('intersection')
+			display.show('intersection')
 			sleep(0.3)
 			for i in range(21):
 				follow(hsv, 380, scan=True, gain=0.15)
