@@ -2,7 +2,10 @@ import cv2
 import numpy as np
 import image
 from time import sleep
+import pigpio
 
+pi = pigpio.pi()
+pi.set_mode(27,pigpio.INPUT)
 
 def search_ball(hsv):
     low = np.array([0, 0, 0])
@@ -20,13 +23,13 @@ def search_ball(hsv):
     return balls
 
 def find_wall():
-    return False # touch
+    return pi.read(27)
 
 box = 1
 face = 0
 
-def explore_rescuezone(tank, ds):
-    search_box = False
+def explore_rescuezone(tank):
+    search_box = True
     position = 50
     while True:
         tank.on(10,10)
@@ -36,6 +39,9 @@ def explore_rescuezone(tank, ds):
             if search_box:
                 if box == face:
                     tank.move(160)
+                    tank.turn(180)
+                    tank.on(100,100)
+                    sleep(0.5)
                     tank.move(-180)
                     tank.turn(180)
                     break
@@ -56,5 +62,3 @@ def explore_rescuezone(tank, ds):
             break
         if(find_wall()):
             tank.turn(90)
-    exit() # stop robot
-                
