@@ -67,7 +67,7 @@ class Green:
             if left_green:
                 left_green = self.check_green(img, left_green_x, line_y)
             if right_green:
-                right_green = self.check_green(img, left_green_x, line_y)
+                right_green = self.check_green(img, right_green_x, line_y)
             if right_green:
                 if left_green:
                     return "back"

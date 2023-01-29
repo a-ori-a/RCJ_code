@@ -21,13 +21,15 @@ pi.set_mode(17,pigpio.INPUT)
 cap = cv2.VideoCapture(0)
 tank = motors.Motor("C", "D")
 # catch = Motor('A')
-ds = DistanceSensor('B')
+# ds = DistanceSensor('B')
+# ds.on()
+# ds.get_distance()
 try:
 	display = LCD()
 except:
 	print('no lcd found')
 green = Green()
-default_speed = 15
+default_speed = 10
 
 if not cap.isOpened():
 	print("No camera found")
@@ -35,9 +37,11 @@ if not cap.isOpened():
 	exit()
 
 #-------------<<This is main>>----------------
-d = 0
+d = 30
 i = 0
 t_road = 'pass'
+counter = 0
+
 
 def follow(img,ypos,scan=False,gain=1):
 	global i,d, hsv
@@ -46,9 +50,9 @@ def follow(img,ypos,scan=False,gain=1):
 		img = image.hsv(frame)
 	tmp, _ = image.turn_strength(img, ypos)
 	d = tmp - d
-	power = ( tmp * 1.5 + d * 2 + i * 0 ) * gain
+	power = ( tmp * 1.8 + d * 2 + i * 0 ) * gain
 	d = tmp
-	i += tmp
+	# i += tmp
 	print(power)
 	tank.on(default_speed-power, default_speed+power)
 
@@ -56,20 +60,51 @@ def follow(img,ypos,scan=False,gain=1):
 # -1 → left
 which_to_turn = 1
 
+# while True:
+# 	ret, frame = cap.read()
+# 	hsv = image.hsv(frame)
+# 	follow(hsv, 460)
+
 
 while True:
 	display.show('hit the switch')
+	follow([],480,scan=True)
+	tank.off()
 	while not pi.read(17):
 		sleep(0.3)
 	display.show('program start')
 	sleep(0.5)
 	while not pi.read(17):
 		# いろいろ初期化
+		counter += 1
 		intersection_points = [300,380,460]
 		ret, frame = cap.read()
 		hsv = image.hsv(frame)
 		line_x = image.detect_line(hsv,350)[0]
-		# 緑検出(最優先)
+		# 障害物検出(最優先)
+		# if counter >= 40:
+		# 	counter = 0
+		# 	tank.off()
+		# 	display.show('get distance')
+			# if 0 < ds.get_distance() < 70:
+			# 	print('obs')
+			# 	display.show('obstacle')
+			# 	tank.turn(110)
+			# 	tank.off()
+			# 	tank.move(300)
+			# 	tank.off()
+			# 	tank.turn(-90)
+			# 	tank.off()
+			# 	tank.move(450)
+			# 	tank.off()
+			# 	tank.turn(-90)
+			# 	tank.off()
+			# 	tank.move(300)
+			# 	tank.off()
+			# 	tank.turn(110)
+			# 	tank.off()
+			# 	display.show('no obstacle')
+		# 緑検出(優先度高)
 		green_state = green.catch_green(hsv, line_x,380)
 		if green_state != 'no': # 緑があったら
 			tank.off() # 休憩
@@ -81,7 +116,8 @@ while True:
 			tank.off() # 休憩
 			_, frame = cap.read() # 写真撮影
 			hsv = image.hsv(frame)
-			green_state = green.catch_green(hsv, line_x,380) # 再検出
+			tmp=green.catch_green(hsv, line_x,380)
+			green_state = tmp if tmp != 'no' else green_state # 再検出
 			display.show(green_state) # 再検出の画面更新
 			sleep(1)
 			if green_state == 'right':
@@ -93,7 +129,7 @@ while True:
 			if green_state != 'no' and green_state != 'back':
 				tank.off()
 				sleep(1)
-				for i in range(10):
+				for i in range(19):
 					follow(hsv, 250, scan=True,gain=0.2)
 					sleep(0.08)
 			if green_state != 'no': tank.turn(turn)
@@ -107,8 +143,8 @@ while True:
 			tank.off()
 			print('intersection')
 			sleep(0.3)
-			for i in range(20):
-				follow(hsv, 370, scan=True, gain=0.2)
+			for i in range(21):
+				follow(hsv, 380, scan=True, gain=0.15)
 				sleep(0.05)
 			# exit()
 		else:
